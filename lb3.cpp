@@ -20,15 +20,15 @@ int main() {
     int sum = 0;
     int max = numeric_limits<int>::min();
     int count = 0;
-    bool negative = false;
+    bool even = false;
 
     for (int i = 0; i < N; i++) {
         int num;
         cout << "Введите число " << i + 1 << ": ";
         cin >> num;
 
-        if (num < 0) {
-            negative = true;
+        if (num % 2 == 0) {
+            even = true;
             sum += num;
 
             if (num > max) {
@@ -41,40 +41,45 @@ int main() {
         }
     }
 
-    if (negative) {
-        cout << "Сумма отрицательных чисел равна: " << sum << endl;
-        cout << "Наибольшее отрицаьельное число: " << max << endl;
-        cout << "Количество его повторений: " << count << endl;
+    if (even) {
+        cout << "Сумма четных чисел равна: " << sum << endl;
+        cout << "Наибольшее четное число: " << max << endl;
     }
     else {
-        cout << "В последовательности нет отрицательных чисел!" << endl;
+        cout << "В последовательности нет целых чисел!" << endl;
     }
 
     //2
 
-    float x;
+    int x;
 
     do {
-        cout << "Введите число x(|x| < 1.000): " << endl;
+        cout << "Введите число x (|x| < 1.000): " << endl;
         cin >> x;
 
-        if (fabs(x) >= 1.000) {
+        if (abs(x) >= 1000) {
             cout << "Число не соответствует условию!" << endl;
         }
-    } while (fabs(x) >= 1.000);
+    } while (abs(x) >= 1000);
 
     int _maxX = 0;
-    int fog = abs(x * 1000);
+    int fog = abs(x);
     if (fog == 0) {
         _maxX = 0;
     }
     while (fog > 0) {
         int digit = fog % 10;
-        if (digit > _maxX) {
-            _maxX = digit;
+        if (digit != 0 && digit != 7) {
+            if (digit > _maxX) {
+                _maxX = digit;
+            }
         }
         fog /= 10;
     }
-
-    cout << "Наибольшая цифра числа x: " << _maxX << endl;
+    if (_maxX != 0) {
+        cout << "Наибольшая цифра числа x: " << _maxX << endl;
+    }
+    else {
+        cout << "Ошибка. Хоть одно число должно отличаться от 0 и 7!" << endl;
+    }
 }
