@@ -1,116 +1,167 @@
-﻿#include <iostream>
-#include <iomanip>
+#include <iostream>
+#include <cmath>
 
 using namespace std;
+int num1, num2, num3;
+int countMaxDigit(int number) {
+    cout << "исп. функция подсчета максимальной цифры" << endl;
 
-int main() {
-    setlocale(LC_ALL, "Ru");
+    number = abs(number);
+    if (number == 0) return 1; 
 
-    // Первое задание
-    int arr[4];
-    cout << "Введите последовательно все элементы массива: " << endl;
-    for (int i = 0; i < 4; i++) {
-        cin >> arr[i];
-    }
-    int first = arr[0];
-    int last = arr[3];
-    int minfirst = 9, minlast = 9;
-    
-    // Получение минимальной цифры у первого и последнего числа
-    while (first > 0) {
-        int digit = first % 10;
-        if (digit < minfirst) {
-            minfirst = digit;
+    int maxDigit = 0;
+    int temp = number;
+    while (temp > 0) {
+        int digit = temp % 10;
+        if (digit > maxDigit) {
+            maxDigit = digit;
         }
-        first /= 10;
+        temp /= 10;
     }
-    while (last > 0) {
-        int digit = last % 10;
-        if (digit < minlast) {
-            minlast = digit;
+
+
+    int count = 0;
+    temp = number;
+    while (temp > 0) {
+        int digit = temp % 10;
+        if (digit == maxDigit) {
+            count++;
         }
-        last /= 10;
+        temp /= 10;
     }
-    
-    if (minfirst == minlast) {
-        for (int i = 1; i < 4; ++i) {
-            int key = arr[i];
-            int j = i - 1;
-            while (j >= 0 && arr[j] > key) {
-                arr[j + 1] = arr[j];
-                --j;
-            }
-            arr[j + 1] = key;
+
+    return count;
+}
+
+double averageOfThree(int a, int b, int c) {
+    cout << "исп. функция среднего по модулю трех чисел" << endl;
+
+    double sum = abs(a) + abs(b) + abs(c);
+    return sum / 3.0;
+}
+
+int task1() {
+    cout << "исп. функция пункта 1" << endl;
+    cout << "Введите три числа: ";
+    cin >> num1 >> num2 >> num3;
+
+    int count = 0;
+    if (num1 != 0) count++;
+    if (num2 != 0) count++;
+    if (num3 != 0) count++;
+
+    cout << "Количество чисел: " << count << endl;
+
+    int result;
+    int number;
+    if (count == 1) {
+        if (num1 > 0) {
+            number = num1;
+            result = countMaxDigit(number);
         }
+        else if (num2 > 0) {
+            number = num2;
+            result = countMaxDigit(number);
+        }
+        else {
+            number = num3;
+            result = countMaxDigit(number);
+        }
+        cout << "Количество повторений максимальной цифры: " << result << endl;      
+    }
+    else if (count == 3) {
+        result = averageOfThree(num1, num2, num3);
+        cout << "Среднее по модулю: " << result << endl;
     }
     else {
-        cout << "Минимальная цифра первого числа не совпадает с минимальной цифрой последнего числа!" << endl;
+        cout << "Ошибка: должно быть либо 1, либо 3 числа!" << endl;
+        result = 0;
     }
 
-    for (int i = 0; i < 4; ++i) cout << arr[i] << ' ';
+    return result;
+}
 
+void task2(int num1, int num2, int num3) {
+    cout << "исп. функция пункта 2" << endl;
 
-    // Второе задание
+    int count = 0;
+    if (num1 != 0) count++;
+    if (num2 != 0) count++;
+    if (num3 != 0) count++;
 
-    const int ROWS = 3;
-    const int COLS = 4;
-    int matrix[ROWS][COLS];
+    cout << "Количество чисел: " << count << endl;
 
-    cout << "Введите элементы матрицы " << ROWS << "x" << COLS << ":" << endl;
-    for (int i = 0; i < ROWS; ++i) {
-        for (int j = 0; j < COLS; ++j) {
-            cout << "Элемент [" << i << "][" << j << "]: ";
-            cin >> matrix[i][j];
+    int result;
+    int number;
+    if (count == 1) {
+        if (num1 > 0) {
+            number = num1;
+            result = countMaxDigit(number);
         }
-    }
-
-    int sumrow1 = 0, sumrow2 = 0, sumrow3 = 0;
-
-    // Считаем сумму для каждой строки
-    for (int j = 0; j < 4; j++) {
-        sumrow1 += matrix[0][j];
-    }
-    sumrow1 = abs(sumrow1);
-
-    for (int j = 0; j < 4; j++) {
-        sumrow2 += matrix[1][j];
-    }
-    sumrow2 = abs(sumrow2);
-
-    for (int j = 0; j < 4; j++) {
-        sumrow3 += matrix[2][j];
-    }
-    sumrow3 = abs(sumrow3);
-
-    cout << "Абсолютные суммы строк:" << endl;
-    cout << sumrow1 << endl;
-    cout << sumrow2 << endl;
-    cout << sumrow3 << endl;
-
-    int minsum = sumrow1;
-    int minrowindex = 0;
-
-    if (sumrow2 < minsum) {
-        minsum = sumrow2;
-        minrowindex = 1;
-    }
-    if (sumrow3 < minsum) {
-        minsum = sumrow3;
-        minrowindex = 2;
-    }
-    cout << "Минимальная сумма: " << minsum << endl;
-
-    for (int j = 0; j < 4; j++) {
-        matrix[minrowindex][j] = 0;
-    }
-    cout << "Матрица после замены:" << endl;
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 4; j++) {
-            cout << matrix[i][j] << "\t";
+        else if (num2 > 0) {
+            number = num2;
+            result = countMaxDigit(number);
         }
-        cout << endl;
+        else {
+            number = num3;
+            result = countMaxDigit(number);
+        }
+        cout << "Количество повторений максимальной цифры: " << result << endl;
     }
+    else if (count == 3) {
+        double result = averageOfThree(num1, num2, num3);
+        if (num1 != num2 != num3) {
+            cout << "Среднее по модулю: " << result << endl;
+        }
+        else {
+            int arr[] = { num1 , num2 , num3 };
+            int i = 1;
+            int min = arr[0];
+            int iMin = 0;
+            while (i < 3) {
+                if (arr[i] < min) {
+                    min = arr[i];
+                    iMin = i;
+                }
+                i++;
+            }
+            cout << "Минимальное значаение: " << min << endl;
+        }
+        
+    }
+    else {
+        cout << "Ошибка: должно быть либо 1, либо 3 числа!" << endl;
+    }
+}
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+
+    int choice;
+
+    do {
+        cout << "1 - Пункт 1 (функция возвращает значение)" << endl;
+        cout << "2 - Пункт 2 (void функция)" << endl;
+        cout << "Выберите пункт: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1: {
+            int result = task1();
+            cout << "Результат функции: " << result << endl;
+            break;
+        }
+        case 2: {
+            int a, b, c;
+            cout << "Введите три числа: ";
+            cin >> a >> b >> c;
+            task2(a, b, c);
+            break;
+        }
+        default:
+            cout << "Неверный выбор! Попробуйте снова." << endl;
+        }
+    } while (choice != 0);
 
     return 0;
-
 }
