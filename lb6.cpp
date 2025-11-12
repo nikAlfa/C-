@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <iomanip>
-#include <cstdlib> // для calloc/malloc/realloc/free
+#include <cstdlib>
 
 using namespace std;
 
@@ -174,4 +174,5 @@ int main() {
     delete b;
 
     return 0;
+
 }
