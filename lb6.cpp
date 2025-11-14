@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <iomanip>
 #include <cstdlib>
 
@@ -17,35 +17,40 @@ void print_matrix(int** matrix, int rows, int cols) {
     }
 }
 
-int** get_new_matrix(int matrix[ROWS][COLS]) {
+
+int** get_new_matrix(int** matrix) {
     int rows = matrix[0][0] + ROWS;
     int columns = matrix[0][1] + COLS;
 
-    int** new_matrix = (int**)malloc(rows * sizeof(int*));
+    matrix = (int**)realloc(matrix, rows*sizeof(int*));
 
     for (int i = 0; i < rows; ++i) {
-        new_matrix[i] = (int*)calloc(columns, sizeof(int));
+        if (i < 2) {
+            matrix[i] = (int*)realloc(matrix[i], columns * sizeof(int));
+        }
+        else {
+            matrix[i] = (int*)malloc(columns * sizeof(int));
+        }
     }
 
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < columns; ++j) {
             if (i < 2 && j < 2) {
-                new_matrix[i][j] = matrix[i][j];
+                matrix[i][j] = matrix[i][j];
             }
             else {
-                new_matrix[i][j] = ((i - 1) * matrix[1][0]) + ((j - 1) * matrix[1][1]);
+                matrix[i][j] = ((i - 1) * matrix[1][0]) + ((j - 1) * matrix[1][1]);
             }
         }
     }
-    return new_matrix;
+    return matrix;
 }
 
-int* findZeroRows(int** matrix, int rows, int cols, int& count) {
+int* findZeroColumns(int** matrix, int rows, int cols, int& count) {
     count = 0;
-
-    for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
         bool hasZero = false;
-        for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++) {
             if (matrix[i][j] == 0) {
                 hasZero = true;
                 break;
@@ -59,55 +64,41 @@ int* findZeroRows(int** matrix, int rows, int cols, int& count) {
     int* arr_index_zero = (int*)malloc(count * sizeof(int));
 
     int index = 0;
-    for (int i = 0; i < rows; i++) {
-        bool hasZero = false;
-        for (int j = 0; j < cols; j++) {
+    for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++) {
             if (matrix[i][j] == 0) {
-                hasZero = true;
+                arr_index_zero[index] = j;
+                index++;
                 break;
             }
-        }
-        if (hasZero) {
-            arr_index_zero[index++] = i;
         }
     }
 
     return arr_index_zero;
 }
 
-int** removeRows(int** matrix, int rows, int cols, int* rowsToRemove, int removeCount, int& newRows) {
+int** removeRows(int** matrix, int rows, int cols, int* colsToRemove, int removeCount, int& newRows) {
     newRows = rows - removeCount;
-
     if (newRows <= 0) {
         return nullptr;
     }
 
-    int** new_matrix = (int**)malloc(newRows * sizeof(int*));
-
-    for (int i = 0; i < newRows; ++i) {
-        new_matrix[i] = (int*)malloc(cols * sizeof(int));
-    }
-
-    int new_i = 0;
-    for (int i = 0; i < rows; i++) {
-        bool shouldRemove = false;
-        for (int k = 0; k < removeCount; k++) {
-            if (i == rowsToRemove[k]) {
-                shouldRemove = true;
-                break;
+    for (int j = 0; j < removeCount; j++) {
+        int colToRemove = colsToRemove[j]-j;
+        for (int col = colToRemove; col < cols - 1; col++) {
+            for (int row = 0; row < rows; row++) {
+                matrix[row][col] = matrix[row][col + 1];
             }
-        }
-
-        if (!shouldRemove) {
-            for (int j = 0; j < cols; j++) {
-                new_matrix[new_i][j] = matrix[i][j];
-            }
-            new_i++;
         }
     }
 
-    return new_matrix;
+    for (int x=0; x < rows; x++) {
+        matrix[x] = (int*)realloc(matrix[x], newRows * sizeof(int));
+    }
+
+    return matrix;
 }
+
 
 void freeMatrix(int** matrix, int rows) {
     if (matrix == nullptr) return;
@@ -121,39 +112,45 @@ void freeMatrix(int** matrix, int rows) {
 int main() {
     setlocale(LC_ALL, "Ru");
     // Первый пункт
-    int matrix[ROWS][COLS];
+    int** matrix = (int**)malloc(ROWS * sizeof(int*));
+    for (int i = 0; i < ROWS; ++i) {
+        matrix[i] = (int*)calloc(ROWS, sizeof(int));
+    }
     cout << "Введите элементы матрицы " << ROWS << "x" << COLS << ":" << endl;
     for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < COLS; ++j) {
             cout << "Элемент [" << i << "][" << j << "]: ";
             cin >> matrix[i][j];
+            if (matrix[i][j] < 0) {
+                cout << "Введите числа большие нуля" << endl;
+                j -= 1;
+            }
         }
     }
 
     int rows = matrix[0][0] + ROWS;
     int columns = matrix[0][1] + COLS;
-
-    int** new_matrix = get_new_matrix(matrix);
-    //print_matrix(new_matrix, rows, columns);
+    matrix = get_new_matrix(matrix);
+    print_matrix(matrix, rows, columns);
 
     int count;
-    int* arr_index_zero = findZeroRows(new_matrix, rows, columns, count);
+    int* arr_index_zero = findZeroColumns(matrix, rows, columns, count);
 
 
     int newRows;
-    int** final_matrix = removeRows(new_matrix, rows, columns, arr_index_zero, count, newRows);
+    matrix = removeRows(matrix, rows, columns, arr_index_zero, count, newRows);
 
-    if (final_matrix != nullptr) {
+    if (matrix != nullptr) {
         cout << "\nМатрица после удаления строк с нулями:";
-        print_matrix(final_matrix, newRows, columns);
+        print_matrix(matrix, columns, newRows);
 
-        freeMatrix(final_matrix, newRows);
+        freeMatrix(matrix, newRows);
     }
     else {
         cout << "\nВсе строки были удалены!" << endl;
     }
 
-    freeMatrix(new_matrix, rows);
+    //freeMatrix(final_matrix, rows);
     free(arr_index_zero);
 
 
@@ -174,5 +171,4 @@ int main() {
     delete b;
 
     return 0;
-
 }
