@@ -18,11 +18,11 @@ void print_matrix(int** matrix, int rows, int cols) {
 }
 
 
-int** get_new_matrix(int** matrix) {
+void get_new_matrix(int**& matrix) {
     int rows = matrix[0][0] + ROWS;
     int columns = matrix[0][1] + COLS;
 
-    matrix = (int**)realloc(matrix, rows*sizeof(int*));
+    matrix = (int**)realloc(matrix, rows * sizeof(int*));
 
     for (int i = 0; i < rows; ++i) {
         if (i < 2) {
@@ -43,7 +43,6 @@ int** get_new_matrix(int** matrix) {
             }
         }
     }
-    return matrix;
 }
 
 int* findZeroColumns(int** matrix, int rows, int cols, int& count) {
@@ -77,14 +76,14 @@ int* findZeroColumns(int** matrix, int rows, int cols, int& count) {
     return arr_index_zero;
 }
 
-int** removeRows(int** matrix, int rows, int cols, int* colsToRemove, int removeCount, int& newRows) {
-    newRows = rows - removeCount;
-    if (newRows <= 0) {
-        return nullptr;
+void removeRows(int**& matrix, int rows, int cols, int* colsToRemove, int removeCount, int& newCols) {
+    newCols = cols - removeCount;
+    if (newCols <= 0) {
+        cout << "Пустая матрица" << endl;
     }
 
     for (int j = 0; j < removeCount; j++) {
-        int colToRemove = colsToRemove[j]-j;
+        int colToRemove = colsToRemove[j] - j;
         for (int col = colToRemove; col < cols - 1; col++) {
             for (int row = 0; row < rows; row++) {
                 matrix[row][col] = matrix[row][col + 1];
@@ -92,22 +91,13 @@ int** removeRows(int** matrix, int rows, int cols, int* colsToRemove, int remove
         }
     }
 
-    for (int x=0; x < rows; x++) {
-        matrix[x] = (int*)realloc(matrix[x], newRows * sizeof(int));
+    for (int x = 0; x < rows; x++) {
+        matrix[x] = (int*)realloc(matrix[x], newCols * sizeof(int));
     }
 
-    return matrix;
 }
 
 
-void freeMatrix(int** matrix, int rows) {
-    if (matrix == nullptr) return;
-
-    for (int i = 0; i < rows; i++) {
-        free(matrix[i]);
-    }
-    free(matrix);
-}
 
 int main() {
     setlocale(LC_ALL, "Ru");
@@ -130,27 +120,26 @@ int main() {
 
     int rows = matrix[0][0] + ROWS;
     int columns = matrix[0][1] + COLS;
-    matrix = get_new_matrix(matrix);
+    get_new_matrix(matrix);
     print_matrix(matrix, rows, columns);
 
     int count;
     int* arr_index_zero = findZeroColumns(matrix, rows, columns, count);
 
 
-    int newRows;
-    matrix = removeRows(matrix, rows, columns, arr_index_zero, count, newRows);
-
+    int newCols;
+    removeRows(matrix, rows, columns, arr_index_zero, count, newCols);
     if (matrix != nullptr) {
         cout << "\nМатрица после удаления строк с нулями:";
-        print_matrix(matrix, columns, newRows);
+        print_matrix(matrix, rows, newCols);
 
-        freeMatrix(matrix, newRows);
+        //freeMatrix(matrix, newCols);
     }
     else {
         cout << "\nВсе строки были удалены!" << endl;
     }
 
-    //freeMatrix(final_matrix, rows);
+
     free(arr_index_zero);
 
 
