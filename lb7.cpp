@@ -96,9 +96,10 @@ int main() {
         case 4:
             cout << "Очистка массива..." << endl;
             size_vector = vec.size();
-            for (int i = 0; i < size_vector; i++) {
-                vec.pop_back();
-            }
+            // for (int i = 0; i < size_vector; i++) {
+            //     vec.pop_back();
+            // }
+            vec.clear()
             break;
         case 5:
             cout << "Введите индекс элемента: ";
