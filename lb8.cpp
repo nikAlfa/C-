@@ -9,11 +9,13 @@ struct MagicCalendar {
     string month_b;
     string month_c;
     string next_season;
+    MagicCalendar* season2;
 
-    void change(struct MagicCalendar& season2) {
+
+    void change() {
         string a = month_a;
-        month_a = season2.month_b;
-        season2.month_b = a;
+        month_a = season2->month_b;
+        season2->month_b = a;
     }
 
     void print() {
@@ -24,28 +26,6 @@ struct MagicCalendar {
 
 };
 
-//Сделал на случай, если я не правильно понял задание
-//void change(struct MagicCalendar& season1, struct MagicCalendar& season2) {
-//    string a = season1.month_a;
-//    season1.month_a = season2.month_b;
-//    season2.month_b = a;
-//}
-
-//void print(struct MagicCalendar& season1, struct MagicCalendar& season2, struct MagicCalendar& season3, struct MagicCalendar& season4) {
-//    cout << season1.month_a << endl;
-//    cout << season1.month_b << endl;
-//    cout << season1.month_c << endl;
-//    cout << season2.month_a << endl;
-//    cout << season2.month_b << endl;
-//    cout << season2.month_c << endl;
-//    cout << season3.month_a << endl;
-//    cout << season3.month_b << endl;
-//    cout << season3.month_c << endl;
-//    cout << season4.month_a << endl;
-//    cout << season4.month_b << endl;
-//    cout << season4.month_c << endl;
-//}
-
 int main() {
     setlocale(LC_ALL, "Ru");
     MagicCalendar winter;
@@ -54,24 +34,33 @@ int main() {
     winter.month_b = "Январь";
     winter.month_c = "Февраль";
     winter.next_season = "Весна";
+    winter.season2 = nullptr;
     MagicCalendar spring;
     spring.name_season = "Весна";
     spring.month_a = "Март";
     spring.month_b = "Апрель";
     spring.month_c = "Май";
     spring.next_season = "Лето";
+    spring.season2 = nullptr;
     MagicCalendar summer;
     summer.name_season = "Лето";
     summer.month_a = "Июнь";
     summer.month_b = "Июль";
     summer.month_c = "Август";
     summer.next_season = "Осень";
+    summer.season2 = nullptr;
     MagicCalendar autumn;
     autumn.name_season = "Осень";
     autumn.month_a = "Сентябрь";
     autumn.month_b = "Октябрь";
     autumn.month_c = "Ноябрь";
     autumn.next_season = "Зима";
+    autumn.season2 = nullptr;
+
+    winter.season2 = &spring;
+    spring.season2 = &summer;
+    summer.season2 = &autumn;
+    autumn.season2 = &winter;
 
 
     while (true) {
@@ -80,21 +69,18 @@ int main() {
         cin >> choice_target;
         switch (choice_target) {
         case 1:
-            winter.change(spring);
-            spring.change(summer);
-            summer.change(autumn);
-            autumn.change(winter);
-            //change(winter, spring);
-            //change(spring, summer);
-            //change(summer, autumn);
-            //change(autumn, winter);
+            cout << "Смена месяцев со следующим сезоном" << endl;
+            winter.change();
+            spring.change();
+            summer.change();
+            autumn.change();
             break;
         case 2:
+            cout << "Вывод всех месяцев" << endl;
             winter.print();
             spring.print();
             summer.print();
             autumn.print();
-            //print(winter, spring, summer, autumn)
             break;
         }
 
