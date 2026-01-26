@@ -1,1 +1,218 @@
+#include <iostream>
+#include <string>
+#include <regex>
 
+using namespace std;
+
+class Student {
+private:
+    string firstName;
+    string lastName;
+    string direction;
+    int courseNumber;
+    string groupNumber;
+    int variantNumber;
+
+protected:
+    // Защищенное поле для примера
+    string studentID;
+
+public:
+    // Конструкторы
+    Student() : firstName(""), lastName(""), direction(""), 
+                courseNumber(1), groupNumber(""), variantNumber(1), studentID("") {
+        cout << "Конструктор по умолчанию создан" << endl;
+    }
+
+    // Конструктор копирования
+    Student(const Student& other) : 
+        firstName(other.firstName),
+        lastName(other.lastName),
+        direction(other.direction),
+        courseNumber(other.courseNumber),
+        groupNumber(other.groupNumber),
+        variantNumber(other.variantNumber),
+        studentID(other.studentID) {
+        cout << "Конструктор копирования создан" << endl;
+    }
+
+    // Конструктор полного заполнения
+    Student(string fName, string lName, string dir, int course, 
+            string group, int variant, string id = "") : 
+        firstName(fName),
+        lastName(lName),
+        direction(dir),
+        courseNumber(course),
+        groupNumber(group),
+        variantNumber(variant),
+        studentID(id) {
+        cout << "Конструктор полного заполнения создан" << endl;
+    }
+
+    // Деструктор
+    ~Student() {
+        cout << "Деструктор для студента " << firstName << " " << lastName << " запущен" << endl;
+    }
+
+    // Геттеры для private полей
+    string getFirstName() const {
+        return firstName;
+    }
+
+    string getLastName() const {
+        return lastName;
+    }
+
+    string getDirection() const {
+        return direction;
+    }
+
+    int getCourseNumber() const {
+        return courseNumber;
+    }
+
+    string getGroupNumber() const {
+        return groupNumber;
+    }
+
+    int getVariantNumber() const {
+        return variantNumber;
+    }
+
+    // Геттеры для protected полей
+    string getStudentID() const {
+        return studentID;
+    }
+
+    // Сеттеры для private полей с проверками
+    void setFirstName(const string& name) {
+        if (!name.empty() && all_of(name.begin(), name.end(), [](char c) {
+            return isalpha(c) || c == ' ' || c == '-';
+        })) {
+            firstName = name;
+        } else {
+            cout << "Ошибка: Некорректное имя" << endl;
+        }
+    }
+
+    void setLastName(const string& surname) {
+        if (!surname.empty() && all_of(surname.begin(), surname.end(), [](char c) {
+            return isalpha(c) || c == ' ' || c == '-';
+        })) {
+            lastName = surname;
+        } else {
+            cout << "Ошибка: Некорректная фамилия" << endl;
+        }
+    }
+
+    void setDirection(const string& dir) {
+        if (!dir.empty() && dir.length() >= 2) {
+            direction = dir;
+        } else {
+            cout << "Ошибка: Некорректное направление" << endl;
+        }
+    }
+
+    void setGroupNumber(const string& group) {
+        // Проверяем формат номера группы (например: ИВБО-01-21)
+        regex groupPattern(R"(^[А-ЯA-Z]{2,5}-\d{2}-\d{2}$)");
+        if (regex_match(group, groupPattern)) {
+            groupNumber = group;
+        } else {
+            cout << "Ошибка: Некорректный номер группы. Формат: ААА-00-00" << endl;
+        }
+    }
+
+    // Сеттер для номера курса (к) - с параметром
+    void setCourseNumber(int course) {
+        if (course >= 1 && course <= 6) { // Предположим, максимум 6 курсов
+            courseNumber = course;
+        } else {
+            cout << "Ошибка: Номер курса должен быть от 1 до 6" << endl;
+        }
+    }
+
+    // Сеттер для номера варианта (к) - с параметром
+    void setVariantNumber(int variant) {
+        if (variant >= 1 && variant <= 30) { // Предположим, максимум 30 вариантов
+            variantNumber = variant;
+        } else {
+            cout << "Ошибка: Номер варианта должен быть от 1 до 30" << endl;
+        }
+    }
+
+    // Сеттер для protected поля
+    void setStudentID(const string& id) {
+        // Проверяем формат (например: А555АА)
+        regex idPattern(R"(^[А-ЯA-Z]\d{3}[А-ЯA-Z]{2}$)");
+        if (regex_match(id, idPattern)) {
+            studentID = id;
+        } else {
+            cout << "Ошибка: Некорректный ID. Формат: А555АА" << endl;
+        }
+    }
+
+    // Метод вывода всей информации
+    void displayInfo() const {
+        cout << "\n=== Информация о студенте ===" << endl;
+        cout << "Имя: " << firstName << endl;
+        cout << "Фамилия: " << lastName << endl;
+        cout << "Направление: " << direction << endl;
+        cout << "Курс: " << courseNumber << endl;
+        cout << "Группа: " << groupNumber << endl;
+        cout << "Вариант: " << variantNumber << endl;
+        cout << "ID студента: " << (studentID.empty() ? "не указан" : studentID) << endl;
+    }
+
+    // Метод перевода на следующий курс () - без параметров
+    void promoteToNextCourse() {
+        if (courseNumber < 6) { // Предположим, максимум 6 курсов
+            courseNumber++;
+            cout << "Студент " << firstName << " " << lastName 
+                 << " переведен на " << courseNumber << " курс" << endl;
+        } else {
+            cout << "Ошибка: Студент уже на последнем курсе" << endl;
+        }
+    }
+};
+
+// Пример использования класса
+int main() {
+    cout << "=== Пример 1: Конструктор по умолчанию ===" << endl;
+    Student student1;
+    student1.setFirstName("Иван");
+    student1.setLastName("Иванов");
+    student1.setDirection("Информатика");
+    student1.setCourseNumber(2);
+    student1.setGroupNumber("ИВБО-01-21");
+    student1.setVariantNumber(5);
+    student1.setStudentID("А123БВ");
+    student1.displayInfo();
+    
+    cout << "\n=== Пример 2: Конструктор полного заполнения ===" << endl;
+    Student student2("Петр", "Петров", "Математика", 3, "МАТ-02-20", 12, "В456ГД");
+    student2.displayInfo();
+    
+    cout << "\n=== Пример 3: Конструктор копирования ===" << endl;
+    Student student3 = student2;
+    student3.displayInfo();
+    
+    cout << "\n=== Тестирование методов ===" << endl;
+    // Тестирование перевода на следующий курс
+    student1.promoteToNextCourse();
+    student1.displayInfo();
+    
+    // Попытка установить некорректные данные
+    cout << "\n=== Тестирование проверок ===" << endl;
+    student1.setGroupNumber("Некорректная группа"); // Не пройдет проверку
+    student1.setStudentID("НекорректныйID"); // Не пройдет проверку
+    student1.setCourseNumber(7); // Не пройдет проверку
+    
+    cout << "\n=== Проверка геттеров ===" << endl;
+    cout << "Имя студента 2: " << student2.getFirstName() << endl;
+    cout << "Фамилия студента 2: " << student2.getLastName() << endl;
+    cout << "Курс студента 2: " << student2.getCourseNumber() << endl;
+    cout << "Вариант студента 2: " << student2.getVariantNumber() << endl;
+    
+    return 0;
+}
