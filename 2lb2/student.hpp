@@ -6,21 +6,23 @@
 #include <algorithm>
 #include <regex>
 
+using namespace std;
+
 class Student {
 private:
-    std::string firstName;
-    std::string lastName;
-    std::vector<std::string> debts; // вектор долгов (предметы)
+    string firstName;
+    string lastName;
+    vector<string> debts; // вектор долгов (предметы)
 
 protected:
-    std::string studentID;
+    string studentID;
 
 public:
     // Конструкторы
     Student();
-    Student(const std::string& fName, const std::string& lName, 
-            const std::vector<std::string>& debtsList = {}, 
-            const std::string& id = "");
+    Student(const string& fName, const string& lName, 
+            const vector<string>& debtsList = {}, 
+            const string& id = "");
     
     // Конструктор копирования
     Student(const Student& other);
@@ -37,28 +39,29 @@ public:
     Student operator/(const Student& other) const;  // пересечение долгов
 
     // Геттеры
-    std::string getFirstName() const;
-    std::string getLastName() const;
-    std::vector<std::string> getDebts() const;
-    std::string getStudentID() const;
+    string getFirstName() const;
+    string getLastName() const;
+    vector<string> getDebts() const;
+    string getStudentID() const;
 
     // Сеттеры
-    void setFirstName(const std::string& name);
-    void setLastName(const std::string& surname);
-    void setDebts(const std::vector<std::string>& debtsList);
-    void addDebt(const std::string& subject);  // добавить долг
-    void removeDebt(const std::string& subject); // удалить долг
-    void setStudentID(const std::string& id);
+    void setFirstName(const string& name);
+    void setLastName(const string& surname);
+    void setDebts(const vector<string>& debtsList);
+    void addDebt(const string& subject);  // добавить долг
+    void removeDebt(const string& subject); // удалить долг
+    void setStudentID(const string& id);
 
     // Метод вывода информации
     void displayInfo() const;
 
 private:
     // Вспомогательные методы для работы с долгами
-    std::vector<std::string> mergeDebts(const std::vector<std::string>& debts1, 
-                                        const std::vector<std::string>& debts2) const;
-    std::vector<std::string> subtractDebts(const std::vector<std::string>& debts1, 
-                                          const std::vector<std::string>& debts2) const;
-    std::vector<std::string> intersectDebts(const std::vector<std::string>& debts1, 
-                                           const std::vector<std::string>& debts2) const;
+    vector<string> mergeDebts(const vector<string>& debts1, 
+                                        const vector<string>& debts2) const;
+    vector<string> subtractDebts(const vector<string>& debts1, 
+                                          const vector<string>& debts2) const;
+    vector<string> intersectDebts(const vector<string>& debts1, 
+                                           const vector<string>& debts2) const;
 };
+
