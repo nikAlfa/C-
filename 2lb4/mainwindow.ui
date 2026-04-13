@@ -1,31 +1,266 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>600</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
-  </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
- </widget>
- <resources/>
- <connections/>
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>800</width>
+                <height>600</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Товары</string>
+        </property>
+        <widget class="QWidget" name="centralWidget"/>
+        <widget class="QMenuBar" name="menubar">
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>800</width>
+                    <height>21</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QStatusBar" name="statusbar"/>
+    </widget>
+
+    <!-- Форма ввода с метками и полями -->
+    <widget class="QWidget" name="formWidget">
+        <layout class="QGridLayout" name="gridLayout">
+            <!-- Строка 0: Груз -->
+            <item row="0" column="0">
+                <widget class="QLabel" name="labelCargo">
+                    <property name="text">
+                        <string>Груз:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignVCenter</set>
+                    </property>
+                </widget>
+            </item>
+            <item row="0" column="1">
+                <widget class="QLineEdit" name="editCargo">
+                    <property name="minimumSize">
+                        <size>
+                            <width>250</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>300</width>
+                            <height>16777215</height>
+                        </size>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Строка 1: Страна -->
+            <item row="1" column="0">
+                <widget class="QLabel" name="labelCountry">
+                    <property name="text">
+                        <string>Страна:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignVCenter</set>
+                    </property>
+                </widget>
+            </item>
+            <item row="1" column="1">
+                <widget class="QLineEdit" name="editCountry">
+                    <property name="minimumSize">
+                        <size>
+                            <width>150</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>200</width>
+                            <height>16777215</height>
+                        </size>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Строка 2: Вес -->
+            <item row="2" column="0">
+                <widget class="QLabel" name="labelWeight">
+                    <property name="text">
+                        <string>Вес:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignVCenter</set>
+                    </property>
+                </widget>
+            </item>
+            <item row="2" column="1">
+                <widget class="QLineEdit" name="editWeight">
+                    <property name="minimumSize">
+                        <size>
+                            <width>80</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>16777215</height>
+                        </size>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Строка 3: Цена -->
+            <item row="3" column="0">
+                <widget class="QLabel" name="labelPrice">
+                    <property name="text">
+                        <string>Цена:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignVCenter</set>
+                    </property>
+                </widget>
+            </item>
+            <item row="3" column="1">
+                <widget class="QLineEdit" name="editPrice">
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>180</width>
+                            <height>16777215</height>
+                        </size>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Строка 4: Способ доставки (радиокнопки) -->
+            <item row="4" column="0">
+                <widget class="QLabel" name="labelDelivery">
+                    <property name="text">
+                        <string>Способ доставки:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignVCenter</set>
+                    </property>
+                </widget>
+            </item>
+            <item row="4" column="1">
+                <layout class="QHBoxLayout" name="deliveryLayout">
+                    <item>
+                        <widget class="QRadioButton" name="radioPlane">
+                            <property name="text">
+                                <string>Самолет</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QRadioButton" name="radioShip">
+                            <property name="text">
+                                <string>Корабль</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+
+            <!-- Строка 5: Маркеры (чекбоксы) -->
+            <item row="5" column="0">
+                <widget class="QLabel" name="labelMarkers">
+                    <property name="text">
+                        <string>Маркеры:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignVCenter</set>
+                    </property>
+                </widget>
+            </item>
+            <item row="5" column="1">
+                <layout class="QHBoxLayout" name="markersLayout">
+                    <item>
+                        <widget class="QCheckBox" name="checkDamage">
+                            <property name="text">
+                                <string>Повреждение</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="checkNew">
+                            <property name="text">
+                                <string>Новинка</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="checkIrrevocable">
+                            <property name="text">
+                                <string>Безвозвратное</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+
+            <!-- Строка 6: Кнопки Сброс и Сохранить -->
+            <item row="6" column="0" colspan="2">
+                <layout class="QHBoxLayout" name="buttonsLayout">
+                    <item>
+                        <widget class="QPushButton" name="btnReset">
+                            <property name="text">
+                                <string>Сброс</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btnSave">
+                            <property name="text">
+                                <string>Сохранить</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+        </layout>
+    </widget>
+
+    <!-- Заголовок таблицы -->
+    <widget class="QLabel" name="labelFilterTitle">
+        <property name="text">
+            <string>Фильтр</string>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+            </font>
+        </property>
+    </widget>
+
+    <!-- Таблица товаров -->
+    <widget class="QTableWidget" name="tableGoods">
+        <property name="columnCount">
+            <number>3</number>
+        </property>
+        <attribute name="horizontalHeaderVisible">
+            <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+        </attribute>
+        <row/>
+        <row/>
+        <row/>
+        <column/>
+        <column/>
+        <column/>
+    </widget>
 </ui>
